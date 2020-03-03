@@ -23,8 +23,11 @@ for BUILDPACK in $(cat $1/.buildpacks); do
       curl -s "$url" | tar xvz -C "$dir" >/dev/null 2>&1
     elif [[ "$url" =~ \.zip$ ]]; then
       mkdir -p "$dir"
-      TMPFILE=`mktemp`
+      TMPFILE=`mktemp -t buildpackXXXXX`
+      echo "$TMPFILE $dir"
       curl -s "$url" > $TMPFILE && unzip $TMPFILE -d "$dir"
+      LS=`ls $dir`
+      echo "$LS"
     else
       git clone $url $dir >/dev/null 2>&1
     fi
