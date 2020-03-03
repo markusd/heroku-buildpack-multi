@@ -21,6 +21,10 @@ for BUILDPACK in $(cat $1/.buildpacks); do
     if [[ "$url" =~ \.tgz$ ]] || [[ "$url" =~ \.tgz\? ]]; then
       mkdir -p "$dir"
       curl -s "$url" | tar xvz -C "$dir" >/dev/null 2>&1
+    elif [[ "$url" =~ \.zip$ ]]; then
+      mkdir -p "$dir"
+      TMPFILE=`mktemp`
+      curl -s "$url" > $TMPFILE && unzip $TMPFILE -d "$dir"
     else
       git clone $url $dir >/dev/null 2>&1
     fi
